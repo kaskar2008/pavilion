@@ -1,5 +1,3 @@
-const dependencyMap = {};
-
 function getFromPath(path, target) {
   return path.split('.').reduce((o,i)=> o[i], target);
 }
@@ -32,7 +30,7 @@ function createNestedProxy(source, onChange, parent) {
 }
 
 function patchNodes(valuePath, component) {
-  const deps = dependencyMap[valuePath] || [];
+  const deps = component.dependencyMap[valuePath] || [];
 
   deps.forEach(dep => {
     switch (dep.node.nodeType) {
@@ -119,11 +117,11 @@ function collectDependencies(node, component) {
     for (const match of found) {
       const varKey = match[1].trim();
 
-      if (!dependencyMap[varKey]) {
-        dependencyMap[varKey] = [];
+      if (!component.dependencyMap[varKey]) {
+        component.dependencyMap[varKey] = [];
       }
 
-      dependencyMap[varKey].push({
+      component.dependencyMap[varKey].push({
         node,
         template: node.nodeValue,
       });
@@ -134,11 +132,11 @@ function collectDependencies(node, component) {
     const varKey = node.dataset.bind;
 
     if (varKey) {
-      if (!dependencyMap[varKey]) {
-        dependencyMap[varKey] = [];
+      if (!component.dependencyMap[varKey]) {
+        component.dependencyMap[varKey] = [];
       }
 
-      dependencyMap[varKey].push({
+      component.dependencyMap[varKey].push({
         node,
       });
     }
@@ -163,13 +161,15 @@ function renderTemplate(element, templatePath, component) {
   element.style.display = 'none';
   element.innerHTML = html;
   element.childNodes.forEach(el => collectDependencies(el, component));
-  Object.keys(dependencyMap).forEach(key => patchNodes(key, component));
+  Object.keys(component.dependencyMap).forEach(key => patchNodes(key, component));
   element.style.display = elementDisplayStyle;
 }
 
 let componentUid = 1;
 
 class Component {
+  dependencyMap = {};
+
   constructor(options) {
     this.uid = componentUid++;
 
