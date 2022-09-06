@@ -20,6 +20,17 @@
     <button @click="onButtonClick">Increment</button>
   </div>
 
+  <hr>
+
+  <div id="app2"></div>
+
+  <template id="tpl-app2">
+    <input type="text" data-bind="title">
+    <section class="title">
+      <h1>{{title}}</h1>
+    </section>
+  </template>
+
   <script src="pavilion.js"></script>
   <script src="app.js"></script>
 </body>

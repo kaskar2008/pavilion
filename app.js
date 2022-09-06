@@ -54,3 +54,19 @@ window.app = new Component({
     }
   },
 })
+
+window.app2 = new Component({
+  data() {
+    return {
+      title: 'I am the hunter, I am the great unknown',
+    };
+  },
+  template: '#tpl-app2',
+  el: '#app2',
+  created() {
+    console.log('App2 Created');
+  },
+  mounted() {
+    console.log('App2 Mounted');
+  },
+})
