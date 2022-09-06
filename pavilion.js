@@ -41,11 +41,13 @@ function patchNodes(valuePath, component) {
       case dep.node.ELEMENT_NODE:
         switch (dep.node.tagName.toLowerCase()) {
           case 'input':
-            if (['text', 'radio'].includes(dep.node.getAttribute('type'))) {
+            const type = dep.node.getAttribute('type');
+
+            if (['text', 'number'].includes(type)) {
               dep.node.value = getFromPath(valuePath, component.data);
             }
 
-            if (dep.node.getAttribute('type') === 'checkbox') {
+            if (['checkbox'].includes(type)) {
               dep.node.checked = getFromPath(valuePath, component.data);
             }
             break;
@@ -85,11 +87,11 @@ function attachEventListeners(node, component) {
     if (node.tagName.toLowerCase() === 'input') {
       const type = node.getAttribute('type');
       node.addEventListener('input', (event) => {
-        if (type === 'text') {
+        if (['text', 'number'].includes(type)) {
           setOnPath(component.data, event.target.value, binding);
         }
 
-        if (type === 'checkbox') {
+        if (['checkbox'].includes(type)) {
           setOnPath(component.data, event.target.checked, binding);
         }
       });
