@@ -7,7 +7,7 @@ window.app = new Component({
       static: 'not a number',
       interval: null,
       some: {
-        test: 'how',
+        test: '',
         nested: {
           value: 1,
         },
